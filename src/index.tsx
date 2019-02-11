@@ -211,17 +211,6 @@ export class Rnd extends React.Component<Props, State> {
     this.getMaxSizesFromProps = this.getMaxSizesFromProps.bind(this);
   }
 
-  componentDidMount() {
-    const { left, top } = this.getOffsetFromParent();
-    const { x, y } = this.getDraggablePosition();
-    this.draggable.setState({
-      x: x - left,
-      y: y - top,
-    });
-    // HACK: Apply position adjustment
-    this.forceUpdate();
-  }
-
   // HACK: To get `react-draggable` state x and y.
   getDraggablePosition(): { x: number; y: number } {
     const { x, y } = (this.draggable as any).state;
@@ -556,13 +545,7 @@ export class Rnd extends React.Component<Props, State> {
       ...style,
     };
     const { left, top } = this.getOffsetFromParent();
-    let draggablePosition;
-    if (position) {
-      draggablePosition = {
-        x: position.x - left,
-        y: position.y - top,
-      };
-    }
+ 
     return (
       <Draggable
         ref={(c: $TODO) => {
@@ -579,7 +562,7 @@ export class Rnd extends React.Component<Props, State> {
         disabled={disableDragging}
         grid={dragGrid}
         bounds={bounds ? this.state.bounds : undefined}
-        position={draggablePosition}
+        position={position}
         enableUserSelectHack={enableUserSelectHack}
         cancel={cancel}
         scale={scale}
